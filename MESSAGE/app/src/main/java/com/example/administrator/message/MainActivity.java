@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import cn.itcast.Domain.Rank;
+import com.google.gson.Gson;
 import net_untils.Net;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.util.Queue;
 import java.util.Timer;
@@ -31,11 +33,13 @@ public class MainActivity extends Activity {
     private ImageView pause;
     private String TAG = "监测";
     private boolean state = false;//false为翻开，true为插旗
-    private int boomnumber = 10;
     private Afterclick afterclick;
     private long baseTimer;
     private String username;
-    Timer time_R;
+    private int flag_number=10;
+    private boolean pause_time=false;
+    private Timer time_R;
+    private int pause_time_record=0;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -51,18 +55,19 @@ public class MainActivity extends Activity {
                 case SUCESS:
                     time_record = time.getText().toString();
                     JudgingAndSovle();
-
+                    SendResultToNet();
                     Result_Dialog(true);
 
                     break;
                 case EXPLOSTION:
                     time_record = time.getText().toString();
-                    SendResultToNet();
+                    //SendResultToNet();
                     Result_Dialog(false);
                     break;
             }
         }
     };
+    private CountTime timerTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +84,8 @@ public class MainActivity extends Activity {
 
     private void setTime() {
         time_R = new Timer("开机计时器");
-        time_R.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                int time = (int) ((SystemClock.elapsedRealtime() - MainActivity.this.baseTimer) / 1000);
-                String mm = new DecimalFormat("00").format(time % 3600 / 60);
-                String ss = new DecimalFormat("00").format(time % 60);
-                String timeFormat = new String(mm + ":" + ss);
-                Message msg = new Message();
-                msg.obj = timeFormat;
-                handler.sendMessage(msg);
-            }
-
-        }, 0, 1000L);
+        timerTask=new CountTime();
+        time_R.scheduleAtFixedRate(timerTask, 0, 1000L);
     }
 
     private void init() {
@@ -125,6 +119,9 @@ public class MainActivity extends Activity {
 
                 if (point_x < 0 || point_x > 8 || point_y < 0 || point_y > 8) return false;
 
+                //时间暂停时，不能点击
+                if(pause_time)return false;
+
                 if (!lattice.is_init()) lattice.init();
 
                 //点击事件判断
@@ -146,23 +143,32 @@ public class MainActivity extends Activity {
                         if (lattice.lattice[point_x][point_y] > -10) {
                             Log.i(TAG, "点击了未查旗子的空格");
                             lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] - 120;
+                            Integer[] p = {point_x, point_y};
+                            if (!afterclick.isCancelled()) {
+                                afterclick = new Afterclick(handler);
+                                afterclick.execute(p);
+                            }
+                            flag_number=flag_number-1;
                             Log.i(TAG, "插旗子的格子：" + lattice.lattice[point_x][point_y] + "; is?" + lattice.booleans_lattice[point_x][point_y]);
                         }
                         //如果已经插上了旗子，再点击旗子则取消
                         else {
                             Log.i(TAG, "点击了已经查旗子的空格");
                             lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] + 120;
+                            flag_number=flag_number+1;
                         }
                     }
 
                 }
 
 
+                boom.setText(" "+flag_number);
                 dispaly.invalidate();
 
                 return false;
             }
         };
+
         dispaly.setOnTouchListener(touchListener);
 
         //插旗按钮事件
@@ -188,6 +194,36 @@ public class MainActivity extends Activity {
         };
         over.setOnClickListener(over_l);
 
+        //暂停按钮点击事件
+        View.OnTouchListener pause_touch=new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    pause.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    if(!pause_time){
+                        pause_time_record=timerTask.getCurrentTime();
+                        time_R.cancel();
+                        pause_time=true;
+                    }else{
+                        baseTimer = SystemClock.elapsedRealtime();
+                        setTime();
+                        pause_time=false;
+                    }
+
+                }
+                else if(event.getAction()==MotionEvent.ACTION_UP){
+                    pause.setBackgroundColor(getResources().getColor(R.color.gray));
+                }
+
+                return false;
+            }
+        };
+        pause.setOnTouchListener(pause_touch);
+
+
+
 
     }
 
@@ -195,8 +231,11 @@ public class MainActivity extends Activity {
         lattice.init();
         new serivce().execute();
         time.setText("00:00");
+        pause_time_record=0;
         this.baseTimer = SystemClock.elapsedRealtime();
         setTime();
+         flag_number=10;
+         boom.setText(flag_number+"");
 
         dispaly.invalidate();
 
@@ -205,12 +244,14 @@ public class MainActivity extends Activity {
     private void JudgingAndSovle() {
         int mm = Integer.valueOf(time_record.substring(0, time_record.indexOf(":")));
         int ss = Integer.valueOf(time_record.substring(time_record.indexOf(":")+1));
-        SharedPreferences read = getSharedPreferences("lattice", MODE_WORLD_READABLE);
-        String value = read.getString("fraction", "99:00");
+        SharedPreferences read = getSharedPreferences("lattice", MODE_PRIVATE);
+        String value = read.getString("fraction", "99:99");
 
             int mp = Integer.valueOf(value.substring(0, value.indexOf(":")));
             int sp = Integer.valueOf(value.substring(value.indexOf(":")+1));
+            Log.i(TAG,"当前值："+time_record+", 记录值："+value);
             if (mm * 60 + ss < mp * 60 + sp) {
+                Log.i(TAG,"记录成功的值");
                 SharedPreferences.Editor editor = getSharedPreferences("lattice",  MODE_PRIVATE).edit();
                 editor.putString("fraction", time_record);
                 editor.commit();
@@ -224,8 +265,10 @@ public class MainActivity extends Activity {
         View view = View.inflate(this, R.layout.result_dialog, null);
         final ImageView image=view.findViewById(R.id.result_image);
         final TextView dispaly_time=view.findViewById(R.id.dispaly_time);
+        final TextView shorter=view.findViewById(R.id.shortertime);
         Button determine=view.findViewById(R.id.result_determine);
         Button re=view.findViewById(R.id.result_return);
+
         dialog.setContentView(view);
 
         //使得点击对话框外部不消失对话框
@@ -246,6 +289,15 @@ public class MainActivity extends Activity {
         else{
             image.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.fairue));
             dispaly_time.setText("耗时："+time_record);
+        }
+
+        //显示最短时间
+        SharedPreferences read = getSharedPreferences("lattice", MODE_PRIVATE);
+        String value = read.getString("fraction", "99:99");
+        if(!value.equals("99:99")){
+            shorter.setText("最短时间："+value);
+        }else{
+            shorter.setText("无记录");
         }
 
         determine.setOnClickListener(new View.OnClickListener() {
@@ -295,6 +347,50 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 username =edit.getText().toString();
 
+                final Rank rank=new Rank();
+                rank.setName(username);
+                rank.setTime(0);
+                Net net=null;
+
+                try {
+                    net=new Net("http://106.14.12.46:8080/Message/servlet/GetRank",rank,1) {
+                        @Override
+
+                        protected void onPostExecute(String result) {
+                            String frist=null;
+                            Rank response_rank= null;
+                            try {
+                                response_rank = new Gson().fromJson(result, Rank.class);
+                                if(response_rank==null) Log.i(TAG,"respone为空");
+
+                                 frist= URLDecoder.decode(response_rank.getL().get(0).getName());
+                                 if(frist.length()<10){
+                                     for(int i=0;i<(10-frist.length());i++)
+                                     {
+                                         frist=frist+"  ";
+                                         frist=" "+frist;
+                                     }
+
+                                 }
+
+                            } catch (Exception e) {
+                                frist="服务器出错";
+                                e.printStackTrace();
+                            }
+
+
+                            grade.setText(frist);
+
+                        }
+                    };
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                net.execute();
+
+
+
                 dialog.dismiss();
             }
         });
@@ -333,8 +429,6 @@ public class MainActivity extends Activity {
     }
 
 
-
-
     class Afterclick extends AsyncTask<Integer, String, String> {
         Handler handler;
 
@@ -355,12 +449,23 @@ public class MainActivity extends Activity {
                 handler.sendMessage(msg);
             }
 
-            //结束监测
+
             boolean count = false;
+            //结束监测1
             for (int i = 0; i < 9; i++)
                 for (int j = 0; j < 9; j++) {
                     if (lattice.lattice[i][j] == 100) count = true;
                 }
+//            //结束监测2
+//            for (int i = 0; i < 9; i++)
+//                for (int j = 0; j < 9; j++) {
+//                    if (lattice.booleans_lattice[i][j] ==false && lattice.lattice[i][j] == 100
+//                            ||lattice.booleans_lattice[i][j] ==false && lattice.lattice[i][j] <-10
+//                    );
+//                        else  count = true;
+//
+//                }
+
             if (!count) {
                 Bundle b = new Bundle();
                 b.putInt("msg", SUCESS);
@@ -370,7 +475,12 @@ public class MainActivity extends Activity {
                 return null;
             }
 
-            //点击到空白
+
+
+            //点击的时旗子，直接返回
+            if (lattice.lattice[integers[0]][integers[1]] <-10)return null;
+
+                //点击到空白
             search(integers[0], integers[1]);
             Bundle b = new Bundle();
             b.putInt("msg", NORMAL);
@@ -445,7 +555,24 @@ public class MainActivity extends Activity {
 
 
     }
+    class CountTime extends TimerTask{
+        int time;
+        public void run() {
 
+            time = (int) ((SystemClock.elapsedRealtime() - MainActivity.this.baseTimer) / 1000)+pause_time_record;
+            String mm = new DecimalFormat("00").format(time % 3600 / 60);
+            String ss = new DecimalFormat("00").format(time % 60);
+            String timeFormat = new String(mm + ":" + ss);
+            Message msg = new Message();
+            msg.obj = timeFormat;
+            handler.sendMessage(msg);
+        }
+
+        protected int getCurrentTime(){
+            return time;
+        }
+
+    }
     class point {
         int x;
         int y;
@@ -460,7 +587,6 @@ public class MainActivity extends Activity {
             this.y = y;
         }
     }
-
     static int timeConvert(String time){
         byte[] minute = time.getBytes();
         int mm = Integer.valueOf(time.substring(0, time.indexOf(":")));

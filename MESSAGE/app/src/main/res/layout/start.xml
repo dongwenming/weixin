@@ -16,36 +16,53 @@
             android:src="@drawable/bomb"
     />
 
+    <RelativeLayout
+            style="@style/RelativeView_style"
+            android:id="@+id/btnSaolie1"
+            android:layout_below="@id/headImage">
+        <ImageView
+                style="@style/ImageView_style"
+                android:id="@+id/imagesaolei"
+                android:src="@drawable/tubiao"/>
+        <Button
+                style="@style/Button_style"
+                android:id="@+id/btnSaolie"
+                android:layout_toRightOf="@id/imagesaolei"
+                android:text="扫雷"
+        />
+    </RelativeLayout>
 
-    <Button
-            android:layout_marginTop="40dp"
-            android:id="@+id/btnSaolie"
-            android:layout_below="@id/headImage"
-            android:layout_centerHorizontal="true"
-            android:layout_height="50dp"
-            android:layout_width="200dp"
-            android:text="扫雷"
-    />
+    <RelativeLayout
+            style="@style/RelativeView_style"
+            android:id="@+id/btnRecord1"
+            android:layout_below="@id/btnSaolie1">
+        <ImageView
+                style="@style/ImageView_style"
+                android:id="@+id/imagerecord"
+                android:src="@drawable/tubiao"/>
 
-    <Button
-            android:layout_marginTop="40dp"
-            android:text="记录"
-            android:id="@+id/btnRecord"
-            android:layout_below="@id/btnSaolie"
-            android:layout_centerHorizontal="true"
-            android:layout_height="50dp"
-            android:layout_width="200dp"
-    />
+        <Button
+                style="@style/Button_style"
+                android:id="@+id/btnRecord"
+                android:layout_toRightOf="@id/imagerecord"
+                android:text="记录" />
+    </RelativeLayout>
 
-    <Button
-            android:layout_marginTop="40dp"
-            android:text="排行"
-            android:id="@+id/btnRank"
-            android:layout_below="@id/btnRecord"
-            android:layout_centerHorizontal="true"
-            android:layout_height="50dp"
-            android:layout_width="200dp"
-    />
+    <RelativeLayout
+            style="@style/RelativeView_style"
+            android:id="@+id/btnbtnRank1"
+            android:layout_below="@id/btnRecord1">
+        <ImageView
+                style="@style/ImageView_style"
+                android:id="@+id/imagerank"
+                android:src="@drawable/tubiao"/>
+        <Button
+                style="@style/Button_style"
+                android:id="@+id/btnbtnRank"
+                android:layout_toRightOf="@id/imagerank"
+                android:text="排名"
+        />
+    </RelativeLayout>
 
 
 

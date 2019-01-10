@@ -3,7 +3,13 @@
 
     <string name="app_name">square</string>
     <string name="hello_world">Hello world!</string>
-    <string name="signup_agreeTerms">官网<a href="http://106.14.12.46:8080/Service_manger"></a></string>  
-    
+    <string name="signup_agreeTerms">官网<a href="http://106.14.12.46:8080/Service_manger"></a></string>
+
+    <string name="feihua">FBI WARNING
+        Federal Law provides severe civil and criminal penalties for
+        the unauthorized, distribution,or exhibition of copyrighted
+        motion pictures(Title 17, United States Code,Sections 501 and 508).
+        The Federal Bureau of Investigation investigates allegations of criminal
+        copyright infringement</string>
 
 </resources>

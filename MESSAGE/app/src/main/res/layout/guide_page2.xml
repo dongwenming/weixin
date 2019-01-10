@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/headText"
+        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="60dp"
+        android:textColor="#FF0000"
+        android:text="游戏规则"/>
+
+    <TextView
+        android:id="@+id/ruler"
+        android:layout_below="@id/headText"
+        android:layout_marginTop="40dp"
+        android:layout_height="280dp"
+        android:layout_width="300dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:textColor="#FF0000"
+        android:text="@string/feihua"/>
+
+    <!--<Button-->
+        <!--android:id="@+id/enter"-->
+        <!--android:layout_below="@id/ruler"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="进入游戏"/>-->
+
+</RelativeLayout>

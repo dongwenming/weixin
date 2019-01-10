@@ -129,7 +129,7 @@ public class MyView extends View {
             for(int j=0;j<9;j++){
                 imag.set(i*point,he+j*point,i*point+3+(point-5),he+j*point+3+(point-5));
 
-                if(lattice.booleans_lattice[i][j] && lattice.lattice[i][j]>-50){
+                if(lattice.booleans_lattice[i][j] && lattice.lattice[i][j]>-10){
 
                     if(lattice.lattice[i][j]==100)
                         //画炸弹
