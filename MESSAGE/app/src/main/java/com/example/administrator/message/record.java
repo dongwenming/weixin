@@ -7,5 +7,7 @@ public class record extends Activity {
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 }

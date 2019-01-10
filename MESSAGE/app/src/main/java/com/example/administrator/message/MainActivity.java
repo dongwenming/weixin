@@ -9,7 +9,10 @@ import android.os.*;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import cn.itcast.Domain.Rank;
+import net_untils.Net;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.Queue;
 import java.util.Timer;
@@ -31,6 +34,7 @@ public class MainActivity extends Activity {
     private int boomnumber = 10;
     private Afterclick afterclick;
     private long baseTimer;
+    private String username;
     Timer time_R;
     private Handler handler = new Handler() {
         @Override
@@ -47,11 +51,13 @@ public class MainActivity extends Activity {
                 case SUCESS:
                     time_record = time.getText().toString();
                     JudgingAndSovle();
+
                     Result_Dialog(true);
+
                     break;
                 case EXPLOSTION:
                     time_record = time.getText().toString();
-                    ;
+                    SendResultToNet();
                     Result_Dialog(false);
                     break;
             }
@@ -67,11 +73,8 @@ public class MainActivity extends Activity {
         setlistener();
         new serivce().execute();
         setTime();
+        user_nameDialog();
 
-
-        SharedPreferences read = getSharedPreferences("lattice",  MODE_PRIVATE);
-        String value = read.getString("username", " ");
-        if(value.equals(" "))user_nameDialog();
     }
 
     private void setTime() {
@@ -201,12 +204,12 @@ public class MainActivity extends Activity {
 
     private void JudgingAndSovle() {
         int mm = Integer.valueOf(time_record.substring(0, time_record.indexOf(":")));
-        int ss = Integer.valueOf(time_record.substring(time_record.indexOf(":")));
+        int ss = Integer.valueOf(time_record.substring(time_record.indexOf(":")+1));
         SharedPreferences read = getSharedPreferences("lattice", MODE_WORLD_READABLE);
         String value = read.getString("fraction", "99:00");
 
             int mp = Integer.valueOf(value.substring(0, value.indexOf(":")));
-            int sp = Integer.valueOf(value.substring(value.indexOf(":")));
+            int sp = Integer.valueOf(value.substring(value.indexOf(":")+1));
             if (mm * 60 + ss < mp * 60 + sp) {
                 SharedPreferences.Editor editor = getSharedPreferences("lattice",  MODE_PRIVATE).edit();
                 editor.putString("fraction", time_record);
@@ -279,19 +282,18 @@ public class MainActivity extends Activity {
         //使得点击对话框外部不消失对话框
         dialog.setCanceledOnTouchOutside(true);
         //设置对话框的大小
-        view.setMinimumHeight(dispaly.getHeight());
+
+        view.setMinimumHeight(300);
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        lp.width = dispaly.getWidth();
+        lp.width = 600;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = getSharedPreferences("lattice",  MODE_PRIVATE).edit();
-                editor.putString("username", edit.getText().toString());
-                editor.commit();
+                username =edit.getText().toString();
 
                 dialog.dismiss();
             }
@@ -307,6 +309,29 @@ public class MainActivity extends Activity {
         });
         dialog.show();
     }
+
+    private void SendResultToNet(){
+        Rank rank=new Rank();
+        rank.setName(username);
+        rank.setTime(timeConvert(time_record));
+        Net net=null;
+
+        try {
+            net=new Net("http://106.14.12.46:8080/Message/servlet/GetRank",rank,1) {
+                @Override
+                protected void onPostExecute(String result) {
+
+                }
+            };
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        net.execute();
+
+
+    }
+
 
 
 
@@ -435,6 +460,17 @@ public class MainActivity extends Activity {
             this.y = y;
         }
     }
+
+    static int timeConvert(String time){
+        byte[] minute = time.getBytes();
+        int mm = Integer.valueOf(time.substring(0, time.indexOf(":")));
+        int ss = Integer.valueOf(time.substring(time.indexOf(":")+1));
+
+
+        return mm*60+ss;
+
+    }
+
 
 
 }
