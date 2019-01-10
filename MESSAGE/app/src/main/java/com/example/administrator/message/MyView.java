@@ -125,7 +125,7 @@ public class MyView extends View {
 
         for(int i=0;i<9;i++)
             for(int j=0;j<9;j++){
-                imag.set(i*point,he+j*point,i*point+3+70,he+j*point+3+70);
+                imag.set(i*point,he+j*point,i*point+3+(point-5),he+j*point+3+(point-5));
                 if(lattice.booleans_lattice[i][j] && lattice.lattice[i][j]>-50){
                     if(lattice.lattice[i][j]==100)
                         canvas.drawBitmap(boom,boom_rect,imag,mypaint);
@@ -143,12 +143,12 @@ public class MyView extends View {
                     }
                 }
 
-                else if(lattice.lattice[i][j]<-50)
+                else if(lattice.lattice[i][j]<-10)
                         canvas.drawBitmap(flag,flag_rect,imag,mypaint);
                 else{
                     mypaint.setColor(getResources().getColor(R.color.gray));
-                    right=i*point+3+70;
-                    bottom=j*point+he+70+3;
+                    right=i*point+3+(point-5);
+                    bottom=j*point+he+(point-5)+3;
                     canvas.drawRect(i*point+3,he+j*point+3,right,bottom,mypaint);
                     //Log.i(TAG,"方块：left:"+(i*point+3)+" top:"+(he+j*point+3)+" right:"+right+" bottom："+bottom);
 
@@ -158,6 +158,15 @@ public class MyView extends View {
 
 
     }
+    public  int get_interval(){
+        return getWidth()/9;
+    }
+
+    public int get_Blank_distance(){
+        return (getHeight()-getWidth())/2;
+    }
+
+
 
 
 

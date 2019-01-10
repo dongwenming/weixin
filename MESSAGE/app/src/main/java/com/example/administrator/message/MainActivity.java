@@ -3,6 +3,7 @@ package com.example.administrator.message;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.*;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
     private static final int EXPLOSTION = 98;
     private static final int NORMAL = 96;
     private static final int REFRESH = 95;
+    private String time_record;
     private TextView boom, time, grade;
     private ImageButton over, flag;
     private MyView dispaly;
@@ -42,9 +44,11 @@ public class MainActivity extends Activity {
                     dispaly.invalidate();
                     break;
                 case SUCESS:
+                    time_record=(String)msg.obj;
                     showNormalDialog("挑战成功");
                     break;
                 case EXPLOSTION:
+                    time_record=(String)msg.obj;
                     showNormalDialog("挑战失败");
                     break;
             }
@@ -105,8 +109,8 @@ public class MainActivity extends Activity {
 
 
                 Log.i(TAG, "x=" + event.getX() + "y=" + event.getY());
-                point_x = (int) event.getX() / 73;
-                point_y = (int) (event.getY() - 110) / 73;
+                point_x = (int) event.getX() / dispaly.get_interval();
+                point_y = (int) (event.getY() - dispaly.get_Blank_distance()) /  dispaly.get_interval();
 
                 if (!lattice.is_init()) lattice.init();
 
@@ -126,16 +130,16 @@ public class MainActivity extends Activity {
                         //点击旗子按钮时查旗子
                     else {
 
-                        if (lattice.lattice[point_x][point_y] > -50)
+                        if (lattice.lattice[point_x][point_y] > -10)
                         {
                             Log.i(TAG,"点击了未查旗子的空格");
-                            lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] - 160;
+                            lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] - 120;
                             Log.i(TAG,"插旗子的格子："+lattice.lattice[point_x][point_y]+"; is?"+lattice.booleans_lattice[point_x][point_y]);
                         }
                             //如果已经插上了旗子，再点击旗子则取消
                         else {
                             Log.i(TAG,"点击了已经查旗子的空格");
-                            lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] + 160;
+                            lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] + 120;
                         }
                     }
 
@@ -186,7 +190,7 @@ public class MainActivity extends Activity {
         //normalDialog.setIcon(R.drawable.icon_dialog);
 
         normalDialog.setTitle(s);
-        normalDialog.setMessage(s);
+        normalDialog.setMessage("耗时:"+time_record);
         normalDialog.setPositiveButton("再来一次",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -200,6 +204,9 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //...To-do
+                        Reply();
+                        startActivity(new Intent(MainActivity.this,startActivity.class));
+                        finish();
                     }
                 });
         // 显示
