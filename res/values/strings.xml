@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HomePage</string>
+    <string name="feihua">如果你想为TextView设置一个边框背景，普通矩形边框或者圆角边框！下面可能帮到你！ 另外TextView是很多其他控件的父类，比如Button，也可以设置这样的边框！ 实现原理很简单，自行编写一个ShapeDrawable的资源文件！然后TextView将blackgroung 设置为这个drawable资源即可！</string>
+</resources>
