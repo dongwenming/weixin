@@ -4,14 +4,15 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 
 /*生成地雷格异步任务*/
 public class serivce extends AsyncTask<Handler, String, String> {
-    Set<poin> set = new HashSet<>();
+    List<poin> list = new ArrayList<>();
+    boolean isexist=false;
 
     @Override
     protected String doInBackground(Handler... handlers) {
@@ -20,7 +21,7 @@ public class serivce extends AsyncTask<Handler, String, String> {
         init_number();
 
         print();
-        set.clear();
+        list.clear();
 
 
         return null;
@@ -28,13 +29,19 @@ public class serivce extends AsyncTask<Handler, String, String> {
 
        public void init() {
         Random random = new Random();
-        while (set.size() < 10) {
-            poin p = new poin();
-            p.x = random.nextInt(8);
-            p.y = random.nextInt(8);
-            set.add(p);
-        }
+        poin p;
 
+        while(list.size()<10){
+            isexist=false;
+            p=new poin(random.nextInt(8),random.nextInt(8));
+
+            for(int i=0;i<list.size();i++){
+                if(p.x==list.get(i).x && p.y==list.get(i).y)isexist=true;
+            }
+
+            if(!isexist)list.add(p);
+
+        }
 
 
        }
@@ -42,8 +49,8 @@ public class serivce extends AsyncTask<Handler, String, String> {
        public void init_number() {
 
         //初始化炸弹
-        for (poin p : set) {
-            Log.i("炸弹监测",set.size()+"");
+        for (poin p : list) {
+            Log.i("炸弹监测",list.size()+"");
 
             //设置炸弹
             lattice.lattice[p.x][p.y]=100;
@@ -56,7 +63,6 @@ public class serivce extends AsyncTask<Handler, String, String> {
                             (p.y + j) >= 0 && (p.y + j) < 9) {
 
                         Log.i("监测","x="+(p.x + m)+", y="+(p.y + j)+", p.x="+p.x+", p.y="+p.y);
-                        if( lattice.lattice[p.x + m][p.y + j]<10)
                                 lattice.lattice[p.x + m][p.y + j] =
                                 lattice.lattice[p.x + m][p.y + j] + 1;
                     }
@@ -100,6 +106,10 @@ public class serivce extends AsyncTask<Handler, String, String> {
     class poin {
         protected int x;
         protected int y;
+        poin(int x,int y){
+            this.x=x;
+            this.y=y;
+        }
     }
 
 

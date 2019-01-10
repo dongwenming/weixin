@@ -95,9 +95,11 @@ public class MyView extends View {
         int he=(getHeight()-getWidth())/2;
 
         for(int i=0;i<10;i++){
+            mypaint.setColor(getResources().getColor(R.color.red));
             canvas.drawLine(i*x,he,i*x,getWidth()+he,mypaint);
             //Log.i(TAG,"X:"+i*x);
         }
+
         for(int i=0;i<10;i++){
             mypaint.setColor(getResources().getColor(R.color.red));
             canvas.drawLine(0,he+i*y,getWidth(),he+i*y,mypaint);
@@ -126,16 +128,17 @@ public class MyView extends View {
         for(int i=0;i<9;i++)
             for(int j=0;j<9;j++){
                 imag.set(i*point,he+j*point,i*point+3+(point-5),he+j*point+3+(point-5));
+
                 if(lattice.booleans_lattice[i][j] && lattice.lattice[i][j]>-50){
+
                     if(lattice.lattice[i][j]==100)
+                        //画炸弹
                         canvas.drawBitmap(boom,boom_rect,imag,mypaint);
                     else if(lattice.lattice[i][j]==0){
+                        //画翻开后的空白格
                         mypaint.setColor(getResources().getColor(R.color.white));
                         canvas.drawRect(imag,mypaint);
                     }else{
-
-
-
                             mypaint.setTextSize(30);
                             mypaint.setColor(getResources().getColor(R.color.black));
                             canvas.drawText(lattice.lattice[i][j] + "", i * point + 30, he + j * point + 60, mypaint);
@@ -143,14 +146,18 @@ public class MyView extends View {
                     }
                 }
 
+
                 else if(lattice.lattice[i][j]<-10)
-                        canvas.drawBitmap(flag,flag_rect,imag,mypaint);
+                    //画红旗
+                    canvas.drawBitmap(flag,flag_rect,imag,mypaint);
                 else{
+
                     mypaint.setColor(getResources().getColor(R.color.gray));
                     right=i*point+3+(point-5);
                     bottom=j*point+he+(point-5)+3;
+
+                    //画灰格
                     canvas.drawRect(i*point+3,he+j*point+3,right,bottom,mypaint);
-                    //Log.i(TAG,"方块：left:"+(i*point+3)+" top:"+(he+j*point+3)+" right:"+right+" bottom："+bottom);
 
                 }
             }

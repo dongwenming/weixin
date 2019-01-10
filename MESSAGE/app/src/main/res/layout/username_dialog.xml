@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="给自己取个昵称吧"
+              android:gravity="center"
+              android:layout_marginTop="40dp"
+    />
+    <EditText android:id="@+id/username_edit"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="昵称……"
+              android:layout_marginLeft="10dp"
+              android:layout_marginRight="10dp"
+              android:layout_marginTop="10dp"
+    />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center"
+    >
+        <Button android:id="@+id/userde_termine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginRight="5dp"
+                android:text="确定"
+        />
+        <Button android:id="@+id/user_return"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:text="返回"
+        />
+
+    </LinearLayout>
+
+</android.widget.LinearLayout>

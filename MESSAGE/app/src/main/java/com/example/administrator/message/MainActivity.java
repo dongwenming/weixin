@@ -1,19 +1,19 @@
 package com.example.administrator.message;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.*;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class MainActivity extends Activity {
@@ -21,22 +21,23 @@ public class MainActivity extends Activity {
     private static final int EXPLOSTION = 98;
     private static final int NORMAL = 96;
     private static final int REFRESH = 95;
-    private String time_record;
+    private String time_record = "00:00";
     private TextView boom, time, grade;
     private ImageButton over, flag;
     private MyView dispaly;
     private ImageView pause;
     private String TAG = "监测";
     private boolean state = false;//false为翻开，true为插旗
-    private int boomnumber=10;
+    private int boomnumber = 10;
     private Afterclick afterclick;
     private long baseTimer;
+    Timer time_R;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.obj!=null){
-                time.setText((String)msg.obj);
+            if (msg.obj != null) {
+                time.setText((String) msg.obj);
             }
 
             switch (msg.getData().getInt("msg")) {
@@ -44,12 +45,14 @@ public class MainActivity extends Activity {
                     dispaly.invalidate();
                     break;
                 case SUCESS:
-                    time_record=(String)msg.obj;
-                    showNormalDialog("挑战成功");
+                    time_record = time.getText().toString();
+                    JudgingAndSovle();
+                    Result_Dialog(true);
                     break;
                 case EXPLOSTION:
-                    time_record=(String)msg.obj;
-                    showNormalDialog("挑战失败");
+                    time_record = time.getText().toString();
+                    ;
+                    Result_Dialog(false);
                     break;
             }
         }
@@ -64,23 +67,29 @@ public class MainActivity extends Activity {
         setlistener();
         new serivce().execute();
         setTime();
+
+
+        SharedPreferences read = getSharedPreferences("lattice",  MODE_PRIVATE);
+        String value = read.getString("username", " ");
+        if(value.equals(" "))user_nameDialog();
     }
 
-    private void setTime(){
-    new Timer("开机计时器").scheduleAtFixedRate(new TimerTask() {
-        @Override
-        public void run() {
-            int time = (int)((SystemClock.elapsedRealtime() - MainActivity.this.baseTimer) / 1000);
-            String mm = new DecimalFormat("00").format(time % 3600 / 60);
-            String ss = new DecimalFormat("00").format(time % 60);
-            String timeFormat = new String( mm + ":" + ss);
-            Message msg = new Message();
-            msg.obj = timeFormat;
-            handler.sendMessage(msg);
-        }
+    private void setTime() {
+        time_R = new Timer("开机计时器");
+        time_R.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                int time = (int) ((SystemClock.elapsedRealtime() - MainActivity.this.baseTimer) / 1000);
+                String mm = new DecimalFormat("00").format(time % 3600 / 60);
+                String ss = new DecimalFormat("00").format(time % 60);
+                String timeFormat = new String(mm + ":" + ss);
+                Message msg = new Message();
+                msg.obj = timeFormat;
+                handler.sendMessage(msg);
+            }
 
-    }, 0, 1000L);
-}
+        }, 0, 1000L);
+    }
 
     private void init() {
         boom = findViewById(R.id.boomnumber);
@@ -107,38 +116,38 @@ public class MainActivity extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
 
 
-
                 Log.i(TAG, "x=" + event.getX() + "y=" + event.getY());
                 point_x = (int) event.getX() / dispaly.get_interval();
-                point_y = (int) (event.getY() - dispaly.get_Blank_distance()) /  dispaly.get_interval();
+                point_y = (int) (event.getY() - dispaly.get_Blank_distance()) / dispaly.get_interval();
+
+                if (point_x < 0 || point_x > 8 || point_y < 0 || point_y > 8) return false;
 
                 if (!lattice.is_init()) lattice.init();
 
                 //点击事件判断
                 //如果已经翻开，则不能再响应点击
-                Log.i(TAG,"点击的格子："+lattice.lattice[point_x][point_y]+"; is?"+lattice.booleans_lattice[point_x][point_y]);
-                if(!lattice.booleans_lattice[point_x][point_y]){
+                Log.i(TAG, "点击的格子：" + lattice.lattice[point_x][point_y] + "; is?" + lattice.booleans_lattice[point_x][point_y]);
+                if (!lattice.booleans_lattice[point_x][point_y]) {
                     //点击翻开按钮时翻开
-                    if(!state){
-                        lattice.booleans_lattice[point_x][point_y]=true;
+                    if (!state) {
+                        lattice.booleans_lattice[point_x][point_y] = true;
                         Integer[] p = {point_x, point_y};
-                        if(!afterclick.isCancelled()){
-                            afterclick=new Afterclick(handler);
+                        if (!afterclick.isCancelled()) {
+                            afterclick = new Afterclick(handler);
                             afterclick.execute(p);
                         }
                     }
-                        //点击旗子按钮时查旗子
+                    //点击旗子按钮时查旗子
                     else {
 
-                        if (lattice.lattice[point_x][point_y] > -10)
-                        {
-                            Log.i(TAG,"点击了未查旗子的空格");
+                        if (lattice.lattice[point_x][point_y] > -10) {
+                            Log.i(TAG, "点击了未查旗子的空格");
                             lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] - 120;
-                            Log.i(TAG,"插旗子的格子："+lattice.lattice[point_x][point_y]+"; is?"+lattice.booleans_lattice[point_x][point_y]);
+                            Log.i(TAG, "插旗子的格子：" + lattice.lattice[point_x][point_y] + "; is?" + lattice.booleans_lattice[point_x][point_y]);
                         }
-                            //如果已经插上了旗子，再点击旗子则取消
+                        //如果已经插上了旗子，再点击旗子则取消
                         else {
-                            Log.i(TAG,"点击了已经查旗子的空格");
+                            Log.i(TAG, "点击了已经查旗子的空格");
                             lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] + 120;
                         }
                     }
@@ -179,45 +188,126 @@ public class MainActivity extends Activity {
 
     }
 
-    private void showNormalDialog(String s){
-        /* @setIcon 设置对话框图标
-         * @setTitle 设置对话框标题
-         * @setMessage 设置对话框消息提示
-         * setXXX方法返回Dialog对象，因此可以链式设置属性
-         */
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(MainActivity.this);
-        //normalDialog.setIcon(R.drawable.icon_dialog);
-
-        normalDialog.setTitle(s);
-        normalDialog.setMessage("耗时:"+time_record);
-        normalDialog.setPositiveButton("再来一次",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                        Reply();
-                    }
-                });
-        normalDialog.setNegativeButton("返回主页",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                        Reply();
-                        startActivity(new Intent(MainActivity.this,startActivity.class));
-                        finish();
-                    }
-                });
-        // 显示
-        normalDialog.show();
-    }
-
-    private void Reply(){
+    private void Reply() {
         lattice.init();
         new serivce().execute();
+        time.setText("00:00");
+        this.baseTimer = SystemClock.elapsedRealtime();
+        setTime();
+
         dispaly.invalidate();
+
     }
+
+    private void JudgingAndSovle() {
+        int mm = Integer.valueOf(time_record.substring(0, time_record.indexOf(":")));
+        int ss = Integer.valueOf(time_record.substring(time_record.indexOf(":")));
+        SharedPreferences read = getSharedPreferences("lattice", MODE_WORLD_READABLE);
+        String value = read.getString("fraction", "99:00");
+
+            int mp = Integer.valueOf(value.substring(0, value.indexOf(":")));
+            int sp = Integer.valueOf(value.substring(value.indexOf(":")));
+            if (mm * 60 + ss < mp * 60 + sp) {
+                SharedPreferences.Editor editor = getSharedPreferences("lattice",  MODE_PRIVATE).edit();
+                editor.putString("fraction", time_record);
+                editor.commit();
+            }
+        }
+
+
+
+    private void Result_Dialog(boolean result ){
+        final Dialog dialog = new Dialog(this, R.style.NormalDialogStyle);
+        View view = View.inflate(this, R.layout.result_dialog, null);
+        final ImageView image=view.findViewById(R.id.result_image);
+        final TextView dispaly_time=view.findViewById(R.id.dispaly_time);
+        Button determine=view.findViewById(R.id.result_determine);
+        Button re=view.findViewById(R.id.result_return);
+        dialog.setContentView(view);
+
+        //使得点击对话框外部不消失对话框
+        dialog.setCanceledOnTouchOutside(true);
+        //设置对话框的大小
+        view.setMinimumHeight(dispaly.getHeight());
+        Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = dispaly.getWidth();
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
+
+        if(result){
+            image.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.sucess));
+            dispaly_time.setText("耗时："+time_record);
+        }
+        else{
+            image.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.fairue));
+            dispaly_time.setText("耗时："+time_record);
+        }
+
+        determine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Reply();
+                time_R.cancel();
+                dialog.dismiss();
+            }
+        });
+        re.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Reply();
+                time_R.cancel();
+                startActivity(new Intent(MainActivity.this, startActivity.class));
+                finish();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+
+    }
+
+    private void user_nameDialog(){
+        final Dialog dialog = new Dialog(this, R.style.NormalDialogStyle);
+        View view = View.inflate(this, R.layout.username_dialog, null);
+        final EditText edit=view.findViewById(R.id.username_edit);
+        Button confirm=view.findViewById(R.id.userde_termine);
+        Button re=view.findViewById(R.id.user_return);
+        dialog.setContentView(view);
+
+        //使得点击对话框外部不消失对话框
+        dialog.setCanceledOnTouchOutside(true);
+        //设置对话框的大小
+        view.setMinimumHeight(dispaly.getHeight());
+        Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = dispaly.getWidth();
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getSharedPreferences("lattice",  MODE_PRIVATE).edit();
+                editor.putString("username", edit.getText().toString());
+                editor.commit();
+
+                dialog.dismiss();
+            }
+        });
+        re.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,startActivity.class));
+                finish();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 
 
     class Afterclick extends AsyncTask<Integer, String, String> {
@@ -232,7 +322,7 @@ public class MainActivity extends Activity {
             //点击事件之后响应处理
 
             //炸弹判定
-            if(lattice.lattice[integers[0]][integers[1]]==100) {
+            if (lattice.lattice[integers[0]][integers[1]] == 100) {
                 Bundle b = new Bundle();
                 b.putInt("msg", EXPLOSTION);
                 Message msg = new Message();
@@ -267,80 +357,82 @@ public class MainActivity extends Activity {
 
         //空白格展开
         private void search(int x, int y) {
-            point currentpoint=new point(x,y);
+            point currentpoint = new point(x, y);
             point rear;
             point front;
             boolean[][] is_set = new boolean[9][9];
 
-            for(int i=0;i<9;i++)
-                for(int j=0;j<9;j++)
-                    is_set[i][j]=false;
+            for (int i = 0; i < 9; i++)
+                for (int j = 0; j < 9; j++)
+                    is_set[i][j] = false;
 
-            Queue<point> queue=new ArrayBlockingQueue<point>(70);
+            Queue<point> queue = new ArrayBlockingQueue<point>(70);
             queue.add(currentpoint);
-            is_set[x][y]=true;
-            while (!queue.isEmpty()){
-                front=queue.poll();
-                Log.i(TAG,"point:x="+front.x+", y="+front.y);
-                if(lattice.lattice[front.x][front.y]==0 ) {
-                    if (front.x>0 &&front.y>0 && !is_set[front.x - 1][front.y - 1]) {
-                        currentpoint=new point(front.x-1,(front.y-1));
-                        is_set[front.x-1][front.y-1]=true;
+            is_set[x][y] = true;
+            while (!queue.isEmpty()) {
+                front = queue.poll();
+                Log.i(TAG, "point:x=" + front.x + ", y=" + front.y);
+                if (lattice.lattice[front.x][front.y] == 0) {
+                    if (front.x > 0 && front.y > 0 && !is_set[front.x - 1][front.y - 1]) {
+                        currentpoint = new point(front.x - 1, (front.y - 1));
+                        is_set[front.x - 1][front.y - 1] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.x>0 &&!is_set[front.x - 1][front.y]) {
-                        currentpoint=new point(front.x-1,front.y);
-                        is_set[front.x-1][front.y]=true;
+                    if (front.x > 0 && !is_set[front.x - 1][front.y]) {
+                        currentpoint = new point(front.x - 1, front.y);
+                        is_set[front.x - 1][front.y] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.x>0 &&front.y<8 &&!is_set[front.x - 1][front.y +1]) {
-                        currentpoint=new point(front.x-1,front.y+1);
-                        is_set[front.x-1][front.y+1]=true;
+                    if (front.x > 0 && front.y < 8 && !is_set[front.x - 1][front.y + 1]) {
+                        currentpoint = new point(front.x - 1, front.y + 1);
+                        is_set[front.x - 1][front.y + 1] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.y>0 && !is_set[front.x ][front.y - 1]) {
-                        currentpoint=new point(front.x,front.y-1);
-                        is_set[front.x][front.y-1]=true;
+                    if (front.y > 0 && !is_set[front.x][front.y - 1]) {
+                        currentpoint = new point(front.x, front.y - 1);
+                        is_set[front.x][front.y - 1] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.y<8&&!is_set[front.x ][front.y + 1]) {
-                        currentpoint=new point(front.x,front.y+1);
-                        is_set[front.x][front.y+1]=true;
+                    if (front.y < 8 && !is_set[front.x][front.y + 1]) {
+                        currentpoint = new point(front.x, front.y + 1);
+                        is_set[front.x][front.y + 1] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.x<8 &&front.y>0 &&!is_set[front.x +1][front.y - 1]) {
-                        currentpoint=new point(front.x+1,front.y-1);
-                        is_set[front.x+1][front.y-1]=true;
+                    if (front.x < 8 && front.y > 0 && !is_set[front.x + 1][front.y - 1]) {
+                        currentpoint = new point(front.x + 1, front.y - 1);
+                        is_set[front.x + 1][front.y - 1] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.x<8 && !is_set[front.x +1][front.y ]) {
-                        currentpoint=new point(front.x+1,front.y);
-                        is_set[front.x+1][front.y]=true;
+                    if (front.x < 8 && !is_set[front.x + 1][front.y]) {
+                        currentpoint = new point(front.x + 1, front.y);
+                        is_set[front.x + 1][front.y] = true;
                         queue.add(currentpoint);
                     }
-                    if (front.x<8 &&front.y<8 && !is_set[front.x +1][front.y+1 ]) {
-                        currentpoint=new point(front.x+1,front.y+1);
-                        is_set[front.x+1][front.y+1]=true;
+                    if (front.x < 8 && front.y < 8 && !is_set[front.x + 1][front.y + 1]) {
+                        currentpoint = new point(front.x + 1, front.y + 1);
+                        is_set[front.x + 1][front.y + 1] = true;
                         queue.add(currentpoint);
                     }
                 }
-                lattice.booleans_lattice[front.x][front.y]=true;
+                lattice.booleans_lattice[front.x][front.y] = true;
             }
         }
 
 
-
     }
-    class point{
+
+    class point {
         int x;
         int y;
-        point(){
-            x=0;
-            y=0;
+
+        point() {
+            x = 0;
+            y = 0;
         }
-        point(int x,int y){
-            this.x=x;
-            this.y=y;
+
+        point(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
     }
 
