@@ -3,9 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/headtitle"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="扫雷小游戏"
+        android:textSize="50dp"
+        android:textColor="#ff00"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
     <ImageView
+        android:layout_below="@id/headtitle"
         android:id="@+id/head"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:layout_height="100dp"
         android:layout_width="100dp"
         android:src="@drawable/head"
@@ -17,22 +27,7 @@
         android:layout_below="@id/head"
         android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true"
-        android:shadowColor="#F9F900"
-        android:shadowDx="10.0"
-        android:shadowDy="10.0"
-        android:shadowRadius="3.0"
         android:text="@string/feihua"
-        android:textColor="#4A4AFF" />
-
-    <ImageButton
-        android:layout_height="40dp"
-        android:layout_width="40dp"
-        android:src="@drawable/qianjin"
-        android:background="transparent"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
-
-
-
+        android:textColor="#ff0000" />
 
 </RelativeLayout>
