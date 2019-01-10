@@ -26,14 +26,14 @@ public class startActivity extends Activity {
             }
         });
 
-//              ib_Record = (Button) findViewById(R.id.btnRecord);
-//        ib_Record.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,Record.class));
-//                finish();
-//            }
-//        });
+              ib_Record = (Button) findViewById(R.id.btnRecord);
+        ib_Record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(startActivity.this,record.class));
+                finish();
+            }
+        });
 //        ib_Rank = (Button) findViewById(R.id.btnRank);
 //        ib_Rank.setOnClickListener(new View.OnClickListener() {
 //            @Override
