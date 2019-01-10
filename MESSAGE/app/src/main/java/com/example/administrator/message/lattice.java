@@ -29,7 +29,7 @@ public class lattice {
            booleans_lattice=new boolean[9][9];
            for(int i=0;i<9;i++)
                for (int j=0;j<9;j++)
-                   booleans_lattice[i][j]=true;
+                   booleans_lattice[i][j]=false;
 
 
    }
