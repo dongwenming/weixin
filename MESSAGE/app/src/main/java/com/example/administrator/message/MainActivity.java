@@ -140,16 +140,18 @@ public class MainActivity extends Activity {
                     //点击旗子按钮时查旗子
                     else {
 
-                        if (lattice.lattice[point_x][point_y] > -10) {
-                            Log.i(TAG, "点击了未查旗子的空格");
-                            lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] - 120;
-                            Integer[] p = {point_x, point_y};
-                            if (!afterclick.isCancelled()) {
-                                afterclick = new Afterclick(handler);
-                                afterclick.execute(p);
+                        if (lattice.lattice[point_x][point_y] > -10 ) {
+                            if (flag_number > 0) {
+                                Log.i(TAG, "点击了未查旗子的空格");
+                                lattice.lattice[point_x][point_y] = lattice.lattice[point_x][point_y] - 120;
+                                Integer[] p = {point_x, point_y};
+                                if (!afterclick.isCancelled()) {
+                                    afterclick = new Afterclick(handler);
+                                    afterclick.execute(p);
+                                }
+                                flag_number = flag_number - 1;
+                                Log.i(TAG, "插旗子的格子：" + lattice.lattice[point_x][point_y] + "; is?" + lattice.booleans_lattice[point_x][point_y]);
                             }
-                            flag_number=flag_number-1;
-                            Log.i(TAG, "插旗子的格子：" + lattice.lattice[point_x][point_y] + "; is?" + lattice.booleans_lattice[point_x][point_y]);
                         }
                         //如果已经插上了旗子，再点击旗子则取消
                         else {
@@ -217,6 +219,9 @@ public class MainActivity extends Activity {
                     pause.setBackgroundColor(getResources().getColor(R.color.gray));
                 }
 
+                if(pause_time)pause.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.start));
+                else pause.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.pause));
+
                 return false;
             }
         };
@@ -272,7 +277,7 @@ public class MainActivity extends Activity {
         dialog.setContentView(view);
 
         //使得点击对话框外部不消失对话框
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         //设置对话框的大小
         view.setMinimumHeight(dispaly.getHeight());
         Window dialogWindow = dialog.getWindow();
@@ -332,7 +337,7 @@ public class MainActivity extends Activity {
         dialog.setContentView(view);
 
         //使得点击对话框外部不消失对话框
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         //设置对话框的大小
 
         view.setMinimumHeight(300);
@@ -428,6 +433,13 @@ public class MainActivity extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MainActivity.this,startActivity.class));
+        Reply();
+        finish();
+    }
 
     class Afterclick extends AsyncTask<Integer, String, String> {
         Handler handler;
@@ -596,8 +608,6 @@ public class MainActivity extends Activity {
         return mm*60+ss;
 
     }
-
-
 
 }
 

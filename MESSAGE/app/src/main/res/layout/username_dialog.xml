@@ -8,7 +8,7 @@
 
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="给自己取个昵称吧"
+              android:text="给自己取个昵称吧,以便排名"
               android:gravity="center"
               android:layout_marginTop="40dp"
     />

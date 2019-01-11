@@ -84,32 +84,32 @@ public class record extends Activity {
                         if(rank==null) Log.i("jiance","respone为空");
 
 
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    try {
-                        record1.setText(rank.getL().get(0).getTime());
+                    Log.i("record监测",rank.toString());
+                    try{
+                        record1.setText(CovertToTime(rank.getL().get(0).getTime()));
                         name1.setText(rank.getL().get(0).getName());
-                        record2.setText(rank.getL().get(1).getTime());
+                        record2.setText(CovertToTime(rank.getL().get(1).getTime()));
                         name2.setText(rank.getL().get(1).getName());
-                        record3.setText(rank.getL().get(2).getTime());
+                        record3.setText(CovertToTime(rank.getL().get(2).getTime()));
                         name3.setText(rank.getL().get(2).getName());
-                        record4.setText(rank.getL().get(3).getTime());
+                        record4.setText(CovertToTime(rank.getL().get(3).getTime()));
                         name4.setText(rank.getL().get(3).getName());
-                        record5.setText(rank.getL().get(4).getTime());
+                        record5.setText(CovertToTime(rank.getL().get(4).getTime()));
                         name5.setText(rank.getL().get(4).getName());
-                        record6.setText(rank.getL().get(5).getTime());
+                        record6.setText(CovertToTime(rank.getL().get(5).getTime()));
                         name6.setText(rank.getL().get(5).getName());
-                        record7.setText(rank.getL().get(6).getTime());
+                        record7.setText(CovertToTime(rank.getL().get(6).getTime()));
                         name7.setText(rank.getL().get(6).getName());
-                        record8.setText(rank.getL().get(7).getTime());
+                        record8.setText(CovertToTime(rank.getL().get(7).getTime()));
                         name8.setText(rank.getL().get(7).getName());
-                        record9.setText(rank.getL().get(8).getTime());
+                        record9.setText(CovertToTime(rank.getL().get(8).getTime()));
                         name9.setText(rank.getL().get(8).getName());
-                        record10.setText(rank.getL().get(9).getTime());
+                        record10.setText(CovertToTime(rank.getL().get(9).getTime()));
                         name10.setText(rank.getL().get(9).getName());
+
                     } catch (Exception e) {
                         record1.setText("Server error");
                         name1.setText("Server error");
@@ -145,4 +145,15 @@ public class record extends Activity {
 
 
     }
+
+
+    private String CovertToTime(int time){
+        String  mm=String.valueOf(time/60);
+        if(mm.length()==1)mm="0"+mm;
+        String ss=String.valueOf(time%60);
+        if(ss.length()==1)ss="0"+ss;
+        return mm+":"+ss;
+    }
+
+
 }
