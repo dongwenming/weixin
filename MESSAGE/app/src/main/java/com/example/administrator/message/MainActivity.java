@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.*;
 import android.util.Log;
 import android.view.*;
@@ -96,8 +97,10 @@ public class MainActivity extends Activity {
         over = findViewById(R.id.over);
         flag = findViewById(R.id.flag);
         dispaly = findViewById(R.id.dispaly);
-        over.setBackgroundColor(getResources().getColor(R.color.gray));
-        flag.setBackgroundColor(getResources().getColor(R.color.white));
+//        over.setBackgroundColor(getResources().getColor(R.color.gray));
+//        flag.setBackgroundColor(getResources().getColor(R.color.white));
+        over.setBackgroundColor(Color.parseColor("#ffffff"));
+        flag.setBackgroundColor(Color.parseColor("#ececec"));
         this.baseTimer = SystemClock.elapsedRealtime();
 
     }
@@ -178,8 +181,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 state = true;
-                flag.setBackgroundColor(getResources().getColor(R.color.gray));
-                over.setBackgroundColor(getResources().getColor(R.color.white));
+//                flag.setBackgroundColor(getResources().getColor(R.color.gray));
+//                over.setBackgroundColor(getResources().getColor(R.color.white));
+                flag.setBackgroundColor(Color.parseColor("#ffffff"));
+                over.setBackgroundColor(Color.parseColor("#ececec"));
             }
         };
         flag.setOnClickListener(flag_l);
@@ -189,8 +194,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 state = false;
-                over.setBackgroundColor(getResources().getColor(R.color.gray));
-                flag.setBackgroundColor(getResources().getColor(R.color.white));
+//                over.setBackgroundColor(getResources().getColor(R.color.gray));
+//                flag.setBackgroundColor(getResources().getColor(R.color.white));
+                flag.setBackgroundColor(Color.parseColor("#ececec"));
+                over.setBackgroundColor(Color.parseColor("#ffffff"));
 
             }
         };
@@ -202,7 +209,7 @@ public class MainActivity extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
 
                 if(event.getAction()==MotionEvent.ACTION_DOWN){
-                    pause.setBackgroundColor(getResources().getColor(R.color.white));
+//                    pause.setBackgroundColor(getResources().getColor(R.color.white));
 
                     if(!pause_time){
                         pause_time_record=timerTask.getCurrentTime();
@@ -216,11 +223,11 @@ public class MainActivity extends Activity {
 
                 }
                 else if(event.getAction()==MotionEvent.ACTION_UP){
-                    pause.setBackgroundColor(getResources().getColor(R.color.gray));
+//                    pause.setBackgroundColor(getResources().getColor(R.color.gray));
                 }
 
-                if(pause_time)pause.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.start));
-                else pause.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.pause));
+                if(pause_time)pause.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.start));
+                else pause.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pause));
 
                 return false;
             }
@@ -288,11 +295,11 @@ public class MainActivity extends Activity {
         dialogWindow.setAttributes(lp);
 
         if(result){
-            image.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.sucess));
+            image.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.sucess));
             dispaly_time.setText("耗时："+time_record);
         }
         else{
-            image.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.fairue));
+            image.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.fairue));
             dispaly_time.setText("耗时："+time_record);
         }
 
@@ -403,7 +410,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(MainActivity.this,startActivity.class));
+                startActivity(new Intent(MainActivity.this, startActivity.class));
                 finish();
                 dialog.dismiss();
             }
@@ -436,7 +443,7 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(MainActivity.this,startActivity.class));
+        startActivity(new Intent(MainActivity.this, startActivity.class));
         Reply();
         finish();
     }

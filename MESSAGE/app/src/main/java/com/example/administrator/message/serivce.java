@@ -16,7 +16,7 @@ public class serivce extends AsyncTask<Handler, String, String> {
 
     @Override
     protected String doInBackground(Handler... handlers) {
-        if(!lattice.is_init())lattice.init();
+        if(!lattice.is_init()) lattice.init();
         init();
         init_number();
 
@@ -74,7 +74,7 @@ public class serivce extends AsyncTask<Handler, String, String> {
             for (int i=0;i<9;i++)
                 for (int j=0;j<9;j++)
                 {
-                    if (lattice.lattice[i][j]>100)lattice.lattice[i][j]=100;
+                    if (lattice.lattice[i][j]>100) lattice.lattice[i][j]=100;
                 }
         }
 
@@ -84,12 +84,12 @@ public class serivce extends AsyncTask<Handler, String, String> {
         private void print(){
 
         for(int i=0;i<9;i++)
-            Log.i("初始化监测,第"+i+"行",lattice.lattice[i][0]+" "+
+            Log.i("初始化监测,第"+i+"行", lattice.lattice[i][0]+" "+
                     lattice.lattice[i][1]+" "+
-                    lattice.lattice[i][2]+" "+lattice.lattice[i][0]+" "+
+                    lattice.lattice[i][2]+" "+ lattice.lattice[i][0]+" "+
                     lattice.lattice[i][3]+" "+ lattice.lattice[i][4]+" "+
                             lattice.lattice[i][5]+" "+
-                            lattice.lattice[i][6]+" "+lattice.lattice[i][7]+" "+
+                            lattice.lattice[i][6]+" "+ lattice.lattice[i][7]+" "+
                     lattice.lattice[i][8]+" "
 
             );
@@ -103,13 +103,13 @@ public class serivce extends AsyncTask<Handler, String, String> {
 
     }
 
-    class poin {
-        protected int x;
-        protected int y;
-        poin(int x,int y){
-            this.x=x;
-            this.y=y;
-        }
+class poin {
+    protected int x;
+    protected int y;
+    poin(int x,int y){
+        this.x=x;
+        this.y=y;
     }
+}
 
 

@@ -36,7 +36,7 @@ public class Guide extends Activity implements ViewPager.OnPageChangeListener{
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Guide.this,startActivity.class));
+                startActivity(new Intent(Guide.this, startActivity.class));
                 finish();
             }
 

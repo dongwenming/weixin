@@ -1,34 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-     android:background="@color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradation">
 
-    <TextView
+    <ImageView
         android:id="@+id/headtitle"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="扫雷小游戏"
+        android:layout_width="300dp"
         android:textSize="50dp"
-        android:textColor="#ff00"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:src="@drawable/game_name"
+        />
     <ImageView
         android:layout_below="@id/headtitle"
         android:id="@+id/head"
-        android:layout_marginTop="50dp"
-        android:layout_height="100dp"
-        android:layout_width="100dp"
-        android:src="@drawable/head"
-        android:layout_centerHorizontal="true"/>
+        android:layout_height="150dp"
+        android:layout_width="wrap_content"
+        android:src="@drawable/game_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"/>
 
     <TextView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/head"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="24dp"
         android:layout_centerHorizontal="true"
-        android:text="@string/feihua"
-        android:textColor="#ff0000" />
+        android:text="健康游戏忠告"
+        android:textColor="#ff0000"
+        android:textSize="26dp"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text1"
+        android:id="@+id/text2"
+        android:layout_marginTop="14dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="抵制不良游戏，拒绝盗版游戏。"
+        android:textColor="@color/gray"
+        android:gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text2"
+        android:id="@+id/text3"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="注意自我保护，谨防受骗上当。"
+        android:textColor="@color/gray"
+        android:gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text3"
+        android:id="@+id/text4"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="适度游戏益脑，沉迷游戏伤身。"
+        android:textColor="@color/gray"
+        android:gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text4"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="合理安排时间，享受健康生活。"
+        android:textColor="@color/gray"
+        android:gravity="center_horizontal"/>
 
 </RelativeLayout>

@@ -157,7 +157,7 @@ public class record extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(record.this,startActivity.class));
+        startActivity(new Intent(record.this, startActivity.class));
         finish();
     }
 }

@@ -4,60 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-     android:background="@color/white"
+    android:background="#ececec"
     tools:context=".MainActivity">
 
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="60dp"
-                  android:background="@color/gray"
+                  android:background="@drawable/main_shapes1"
+                  android:layout_marginTop="14dp"
                   android:id="@+id/title"
 
     >
-        <ImageView android:layout_width="55dp"
-                   android:layout_height="match_parent"
-                   android:src="@drawable/lei"
-                   android:scaleType="fitStart"
-                   android:layout_marginLeft="25dp"
-                   android:layout_marginTop="5dp"
+        <ImageView android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/lei"
+            android:scaleType="fitStart"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="8dp"
 
         />
         <TextView android:id="@+id/boomnumber"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:text="10"
-                  android:gravity="center"
-                  android:layout_marginLeft="10dp"
-                  android:textSize="20dp"
-                  android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="10"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:textSize="30dp"
+            android:padding="5dp"
         />
 
-        <ImageView android:layout_width="50dp"
-                   android:layout_height="match_parent"
-                   android:layout_marginLeft="25dp"
-                   android:src="@drawable/time"
-                   android:layout_marginTop="5dp"
-                   android:layout_marginBottom="7dp"
-
-
+        <ImageView android:layout_width="38dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="70dp"
+            android:src="@drawable/time"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="7dp"
         />
 
         <TextView android:id="@+id/time"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:text="0.00"
-                  android:gravity="center"
-                  android:layout_marginLeft="10dp"
-                  android:textSize="20dp"
-                  android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="0.00"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textSize="24dp"
+            android:padding="5dp"
         />
         <ImageView android:id="@+id/pause"
-                   android:layout_width="50dp"
-                   android:layout_height="match_parent"
-                   android:src="@drawable/pause"
-                   android:layout_marginLeft="25dp"
-                   android:layout_marginTop="5dp"
-                   android:layout_marginBottom="7dp"
-                   android:clickable="true"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/pause"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="7dp"
+            android:clickable="true"
         />
     </LinearLayout>
 
@@ -67,43 +66,47 @@
                   android:layout_alignParentBottom="true"
     >
         <TextView android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:text="榜首:"
-                  android:gravity="center"
-                  android:layout_marginLeft="15dp"
-                  android:textSize="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="榜首:"
+            android:textSize="26dp"
+            android:textStyle="bold"
         />
 
         <TextView android:id="@+id/grade"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:text="未连接"
-                  android:gravity="center"
-                  android:layout_marginLeft="5dp"
-                  android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="未连接"
+            android:textSize="26dp"
+            android:textStyle="bold"
         />
 
         <ImageButton
                   android:id="@+id/over"
-                  android:layout_width="60dp"
-                  android:layout_height="match_parent"
-                  android:src="@drawable/over"
-                  android:scaleType="fitCenter"
-                  android:background="#00000000"
-                  android:layout_marginLeft="30dp"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/main_shapes2"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/over"
 
         />
 
         <ImageButton
-                android:id="@+id/flag"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/qizi"
-                android:scaleType="fitCenter"
-                android:background="#00000000"
-                android:layout_marginLeft="30dp"
+            android:id="@+id/flag"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/main_shapes2"
+            android:scaleType="fitCenter"
+            android:src="@drawable/qizi"
 
-        />
+            />
 
     </LinearLayout>
 

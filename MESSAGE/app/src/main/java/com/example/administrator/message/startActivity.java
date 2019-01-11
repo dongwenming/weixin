@@ -38,7 +38,7 @@ public class startActivity extends Activity {
         ib_Rank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(startActivity.this,record.class));
+                startActivity(new Intent(startActivity.this, record.class));
                 finish();
             }
         });

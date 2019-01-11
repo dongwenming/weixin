@@ -4,17 +4,17 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/home_background"
+                android:background="@drawable/gradation"
                 tools:context=".MainActivity">
 
     <ImageView
-            android:layout_marginTop="30dp"
-            android:id="@+id/headImage"
-            android:layout_centerHorizontal="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/bomb"
-    />
+        android:layout_marginTop="20dp"
+        android:id="@+id/headImage"
+        android:layout_centerHorizontal="true"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/bomb"
+        />
 
     <RelativeLayout
             style="@style/RelativeView_style"
@@ -28,7 +28,13 @@
                 style="@style/Button_style"
                 android:id="@+id/btnSaolie"
                 android:layout_toRightOf="@id/imagesaolei"
-                android:text="扫雷"
+                android:text="开始扫雷"
+                android:layout_height="50dp"
+                android:layout_width="160dp"
+                android:textColor="#4f8fe6"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:background="@drawable/start_shapes"
         />
     </RelativeLayout>
 
@@ -45,7 +51,14 @@
                 style="@style/Button_style"
                 android:id="@+id/btnRecord"
                 android:layout_toRightOf="@id/imagerecord"
-                android:text="记录" />
+                android:text="查询记录"
+                android:layout_height="50dp"
+                android:layout_width="160dp"
+                android:textColor="#4f8fe6"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:background="@drawable/start_shapes"
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -60,7 +73,13 @@
                 style="@style/Button_style"
                 android:id="@+id/btnbtnRank"
                 android:layout_toRightOf="@id/imagerank"
-                android:text="排名"
+                android:text="查询排名"
+                android:layout_height="50dp"
+                android:layout_width="160dp"
+                android:textColor="#4f8fe6"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:background="@drawable/start_shapes"
         />
     </RelativeLayout>
 

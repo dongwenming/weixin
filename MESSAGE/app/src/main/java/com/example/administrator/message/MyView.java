@@ -95,13 +95,15 @@ public class MyView extends View {
         int he=(getHeight()-getWidth())/2;
 
         for(int i=0;i<10;i++){
-            mypaint.setColor(getResources().getColor(R.color.red));
+//            mypaint.setColor(getResources().getColor(R.color.red));
+            mypaint.setColor(Color.parseColor("#000000"));
             canvas.drawLine(i*x,he,i*x,getWidth()+he,mypaint);
             //Log.i(TAG,"X:"+i*x);
         }
 
         for(int i=0;i<10;i++){
-            mypaint.setColor(getResources().getColor(R.color.red));
+//            mypaint.setColor(getResources().getColor(R.color.red));
+            mypaint.setColor(Color.parseColor("#000000"));
             canvas.drawLine(0,he+i*y,getWidth(),he+i*y,mypaint);
            // Log.i(TAG,"Y:"+(he+i*y));
 
@@ -109,10 +111,10 @@ public class MyView extends View {
     }
 
     private void drawlattice(Canvas canvas){
-        if(!lattice.is_init())lattice.init();
+        if(!lattice.is_init()) lattice.init();
 
-        Bitmap flag=BitmapFactory.decodeResource(getResources(),R.drawable.flag);
-        Bitmap boom=BitmapFactory.decodeResource(getResources(),R.drawable.boom);
+        Bitmap flag=BitmapFactory.decodeResource(getResources(), R.drawable.flag);
+        Bitmap boom=BitmapFactory.decodeResource(getResources(), R.drawable.boom);
         Rect flag_rect=new Rect(0,0,flag.getWidth(),flag.getHeight());
         Rect boom_rect=new Rect(0,0,boom.getWidth(),boom.getHeight());
         Rect imag=new Rect();;
@@ -121,7 +123,7 @@ public class MyView extends View {
         int he=(getHeight()-getWidth())/2;
         int right;
         int bottom;
-        if(!lattice.is_init())lattice.init();
+        if(!lattice.is_init()) lattice.init();
         Log.i(TAG,"point:"+point);
         Log.i(TAG,"间隔："+he);
 
@@ -136,11 +138,15 @@ public class MyView extends View {
                         canvas.drawBitmap(boom,boom_rect,imag,mypaint);
                     else if(lattice.lattice[i][j]==0){
                         //画翻开后的空白格
-                        mypaint.setColor(getResources().getColor(R.color.white));
+//                        mypaint.setColor(getResources().getColor(R.color.white));
+                        mypaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawRect(imag,mypaint);
                     }else{
-                            mypaint.setTextSize(30);
-                            mypaint.setColor(getResources().getColor(R.color.black));
+                            mypaint.setTextSize(40);
+//                            mypaint.setColor(getResources().getColor(R.color.black));
+                            mypaint.setColor(Color.parseColor("#ffffff"));
+                            canvas.drawRect(imag,mypaint);
+                            mypaint.setColor(Color.parseColor("#0000ff"));
                             canvas.drawText(lattice.lattice[i][j] + "", i * point + 30, he + j * point + 60, mypaint);
 
                     }
@@ -152,7 +158,8 @@ public class MyView extends View {
                     canvas.drawBitmap(flag,flag_rect,imag,mypaint);
                 else{
 
-                    mypaint.setColor(getResources().getColor(R.color.gray));
+//                    mypaint.setColor(getResources().getColor(R.color.gray));
+                    mypaint.setColor(Color.parseColor("#ececec"));
                     right=i*point+3+(point-5);
                     bottom=j*point+he+(point-5)+3;
 
