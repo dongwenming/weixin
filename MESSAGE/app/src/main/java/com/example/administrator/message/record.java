@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import cn.itcast.Domain.Rank;
 import com.google.gson.Gson;
@@ -34,7 +32,7 @@ public class record extends Activity {
     TextView name9;
     TextView record10;
     TextView name10;
-    Button back;
+   // Button back;
     Rank rank;
 
 
@@ -42,7 +40,7 @@ public class record extends Activity {
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record);
-        back=findViewById(R.id.title_Back);
+       // back=findViewById(R.id.title_Back);
         record1=findViewById(R.id.Timecost1);
         name1=findViewById(R.id.Name1);
         record2=findViewById(R.id.Timecost2);
@@ -64,12 +62,13 @@ public class record extends Activity {
         record10=findViewById(R.id.Timecost10);
         name10=findViewById(R.id.Name10);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(record.this,startActivity.class));
-            }
-        });
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(record.this,startActivity.class));
+//                finish();
+//            }
+//        });
 
         Net net=null;
 
@@ -155,5 +154,10 @@ public class record extends Activity {
         return mm+":"+ss;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(record.this,startActivity.class));
+        finish();
+    }
 }

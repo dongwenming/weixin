@@ -279,7 +279,7 @@ public class MainActivity extends Activity {
         //使得点击对话框外部不消失对话框
         dialog.setCanceledOnTouchOutside(false);
         //设置对话框的大小
-        view.setMinimumHeight(dispaly.getHeight());
+        view.setMinimumHeight((int)0.94*dispaly.getHeight());
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = dispaly.getWidth();

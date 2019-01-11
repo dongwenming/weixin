@@ -14,26 +14,18 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:background="@color/colorAccent"
-                      android:layout_width="420dp"
+                      android:layout_width="match_parent"
                       android:layout_height="wrap_content">
-            <Button
-                    android:id="@+id/title_Back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:text="Back"
-                    android:textSize="20dp"
-                    android:textColor="#ff0"/>
+
             <TextView
                     android:id="@+id/title_text"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:layout_marginLeft="80dp"
-
+                    android:layout_marginLeft="5dp"
                     android:text="排行"
+                    android:gravity="center"
                     android:textColor="#fff"
                     android:textSize="24sp" />
         </LinearLayout>

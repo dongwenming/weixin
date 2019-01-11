@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class startActivity extends Activity {
     private Button ib_Saolei;
@@ -30,18 +31,16 @@ public class startActivity extends Activity {
         ib_Record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(startActivity.this,"功能未开发",Toast.LENGTH_SHORT).show();
+            }
+        });
+        ib_Rank = (Button) findViewById(R.id.btnbtnRank);
+        ib_Rank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 startActivity(new Intent(startActivity.this,record.class));
                 finish();
             }
         });
-//        ib_Rank = (Button) findViewById(R.id.btnRank);
-//        ib_Rank.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,Record.class));
-//                finish();
-//            }
-//        });
-//   }
+   }
     }
-}
